@@ -40,8 +40,12 @@ def cargar_dataset():
                     os.makedirs(kaggle_dir)
 
                 # Guardar el archivo kaggle.json
-                with open(os.path.join(kaggle_dir, "kaggle.json"), "wb") as f:
+                kaggle_json_path = os.path.join(kaggle_dir, "kaggle.json")
+                with open(kaggle_json_path, "wb") as f:
                     f.write(kaggle_json.getbuffer())
+
+                # Establecer permisos correctos al archivo kaggle.json
+                os.chmod(kaggle_json_path, 0o600)
 
                 # Configuración de la API de Kaggle
                 api = KaggleApi()
