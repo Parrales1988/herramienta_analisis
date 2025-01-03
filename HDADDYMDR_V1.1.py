@@ -3,6 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+import io
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
@@ -89,19 +90,25 @@ def realizar_eda(data):
     st.dataframe(data.head())
 
     st.write("Información del dataset:")
-    buffer = io.StringIO()
-    data.info(buf=buffer)
-    s = buffer.getvalue()
-    st.text(s)
+    try:
+        buffer = io.StringIO()
+        data.info(buf=buffer)
+        s = buffer.getvalue()
+        st.text(s)
+    except Exception as e:
+        st.error(f"Error al obtener la información del dataset: {e}")
 
     st.write("Estadísticas descriptivas:")
     st.write(data.describe())
 
     if st.checkbox("Mostrar correlación entre variables"):
-        corr = data.corr()
-        st.write("Matriz de correlación:")
-        sns.heatmap(corr, annot=True, cmap="coolwarm")
-        st.pyplot()
+        try:
+            corr = data.corr()
+            st.write("Matriz de correlación:")
+            sns.heatmap(corr, annot=True, cmap="coolwarm")
+            st.pyplot()
+        except Exception as e:
+            st.error(f"Error al mostrar la correlación: {e}")
 
 # Función para realizar regresión
 def aplicar_modelo_regresion(data):
