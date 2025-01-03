@@ -174,6 +174,7 @@ if 'data' not in st.session_state:
     elif opcion == "Cargar Dataset CSV":
         cargar_dataset_csv()
 else:
+    st.sidebar.write("Elige una opción de análisis:")
     menu_opciones = ["EDA", "Regresión"]
     opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
 
@@ -181,4 +182,3 @@ else:
         realizar_eda(st.session_state['data'])
     elif opcion == "Regresión":
         aplicar_modelo_regresion(st.session_state['data'])
-
