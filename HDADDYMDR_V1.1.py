@@ -14,7 +14,7 @@ st.subheader("Explora, analiza y aplica modelos de regresión a tus datos de man
 st.sidebar.header("Menú")
 
 # Función para cargar datasets desde Kaggle
-def cargar_dataset():
+def cargar_dataset_kaggle():
     st.sidebar.subheader("Importar Dataset desde Kaggle")
     st.sidebar.write("Para obtener el enlace del dataset, accede a Kaggle, elige un dataset, y copia la URL desde el navegador.")
     st.sidebar.write("Ejemplo de enlace correcto: https://www.kaggle.com/dataset-owner/dataset-name")
@@ -28,7 +28,7 @@ def cargar_dataset():
     
     kaggle_json = st.sidebar.file_uploader("Sube tu archivo kaggle.json", type="json")
 
-    if st.sidebar.button("Cargar Dataset"):
+    if st.sidebar.button("Cargar Dataset desde Kaggle"):
         if not dataset_url or not kaggle_json:
             st.error("Por favor, complete todos los campos y suba el archivo kaggle.json.")
         else:
@@ -61,6 +61,22 @@ def cargar_dataset():
                 return data
             except Exception as e:
                 st.error(f"Error al descargar el dataset: {e}")
+
+# Función para cargar datasets desde un archivo CSV
+def cargar_dataset_csv():
+    st.sidebar.subheader("Importar Dataset desde un archivo CSV")
+    uploaded_file = st.sidebar.file_uploader("Elige un archivo CSV", type="csv")
+
+    if st.sidebar.button("Cargar Dataset desde CSV"):
+        if uploaded_file is not None:
+            try:
+                data = pd.read_csv(uploaded_file)
+                st.success("Dataset cargado exitosamente.")
+                return data
+            except Exception as e:
+                st.error(f"Error al cargar el dataset: {e}")
+        else:
+            st.error("Por favor, suba un archivo CSV.")
 
 # Función para realizar EDA
 def realizar_eda(data):
@@ -122,12 +138,14 @@ def aplicar_modelo_regresion(data):
             st.write(coef_df)
 
 # Flujo principal de la aplicación
-menu_opciones = ["Cargar Dataset", "EDA", "Regresión"]
+menu_opciones = ["Cargar Dataset Kaggle", "Cargar Dataset CSV", "EDA", "Regresión"]
 opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
 
 data = None
-if opcion == "Cargar Dataset":
-    data = cargar_dataset()
+if opcion == "Cargar Dataset Kaggle":
+    data = cargar_dataset_kaggle()
+elif opcion == "Cargar Dataset CSV":
+    data = cargar_dataset_csv()
 elif opcion == "EDA":
     if 'data' in st.session_state:
         realizar_eda(st.session_state['data'])
