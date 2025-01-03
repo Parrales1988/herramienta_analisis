@@ -34,8 +34,13 @@ def cargar_dataset():
             st.error("Por favor, complete todos los campos y suba el archivo kaggle.json.")
         else:
             try:
+                # Crear la carpeta .kaggle si no existe
+                kaggle_dir = os.path.join(os.path.expanduser("~"), ".kaggle")
+                if not os.path.exists(kaggle_dir):
+                    os.makedirs(kaggle_dir)
+
                 # Guardar el archivo kaggle.json
-                with open(os.path.join(os.path.expanduser("~"), ".kaggle/kaggle.json"), "wb") as f:
+                with open(os.path.join(kaggle_dir, "kaggle.json"), "wb") as f:
                     f.write(kaggle_json.getbuffer())
 
                 # Configuración de la API de Kaggle
