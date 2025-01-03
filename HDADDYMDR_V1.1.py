@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
@@ -27,6 +28,10 @@ def cargar_dataset():
             st.error("Por favor, complete todos los campos.")
         else:
             try:
+                # Configuración de las credenciales de Kaggle
+                os.environ['KAGGLE_USERNAME'] = kaggle_username
+                os.environ['KAGGLE_KEY'] = kaggle_key
+                
                 # Configuración de las credenciales de Kaggle
                 api = KaggleApi()
                 api.authenticate()
