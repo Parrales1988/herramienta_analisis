@@ -138,27 +138,40 @@ def aplicar_modelo_regresion(data):
                 X = X.dropna()
                 y = y[X.index]
 
+            # Comprobar si hay valores no numéricos y convertirlos
+            try:
+                X = X.apply(pd.to_numeric, errors='coerce')
+                y = pd.to_numeric(y, errors='coerce')
+                X = X.dropna()
+                y = y[X.index]
+            except Exception as e:
+                st.error(f"Error al convertir datos a numéricos: {e}")
+                return
+
             # División de datos
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            try:
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-            # Modelo de regresión lineal
-            modelo = LinearRegression()
-            modelo.fit(X_train, y_train)
+                # Modelo de regresión lineal
+                modelo = LinearRegression()
+                modelo.fit(X_train, y_train)
 
-            # Predicción
-            y_pred = modelo.predict(X_test)
+                # Predicción
+                y_pred = modelo.predict(X_test)
 
-            # Métricas
-            mse = mean_squared_error(y_test, y_pred)
-            r2 = r2_score(y_test, y_pred)
+                # Métricas
+                mse = mean_squared_error(y_test, y_pred)
+                r2 = r2_score(y_test, y_pred)
 
-            st.write("Resultados del Modelo:")
-            st.write(f"Error Cuadrático Medio (MSE): {mse}")
-            st.write(f"Coeficiente de Determinación (R^2): {r2}")
+                st.write("Resultados del Modelo:")
+                st.write(f"Error Cuadrático Medio (MSE): {mse}")
+                st.write(f"Coeficiente de Determinación (R^2): {r2}")
 
-            st.write("Coeficientes del modelo:")
-            coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
-            st.write(coef_df)
+                st.write("Coeficientes del modelo:")
+                coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
+                st.write(coef_df)
+            except Exception as e:
+                st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
