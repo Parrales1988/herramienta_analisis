@@ -60,7 +60,7 @@ def cargar_dataset_kaggle():
                 dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
                 data = pd.read_csv(dataset_path)
                 st.session_state['data'] = data
-                st.query_params(data_loaded="true")
+                st.session_state['data_loaded'] = "true"
             except Exception as e:
                 st.error(f"Error al descargar el dataset: {e}")
 
@@ -75,7 +75,7 @@ def cargar_dataset_csv():
                 data = pd.read_csv(uploaded_file)
                 st.success("Dataset cargado exitosamente.")
                 st.session_state['data'] = data
-                st.query_params(data_loaded="true")
+                st.session_state['data_loaded'] = "true"
             except Exception as e:
                 st.error(f"Error al cargar el dataset: {e}")
         else:
