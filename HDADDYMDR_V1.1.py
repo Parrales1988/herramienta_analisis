@@ -113,7 +113,7 @@ def realizar_eda(data):
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
-        st.rerun()
+        st.session_state['view'] = 'menu'
 
 # Función para realizar regresión
 def aplicar_modelo_regresion(data):
@@ -176,20 +176,28 @@ def aplicar_modelo_regresion(data):
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
-        st.rerun()
+        st.session_state['view'] = 'menu'
 
 # Flujo principal de la aplicación
-if 'data' not in st.session_state:
-    menu_opciones = ["Cargar Dataset Kaggle", "Cargar Dataset CSV"]
-    opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
+if 'view' not in st.session_state:
+    st.session_state['view'] = 'menu'
 
-    if opcion == "Cargar Dataset Kaggle":
-        cargar_dataset_kaggle()
-    elif opcion == "Cargar Dataset CSV":
-        cargar_dataset_csv()
-else:
-    st.sidebar.write("Elige una opción de análisis:")
-    if st.sidebar.button("EDA"):
-        realizar_eda(st.session_state['data'])
-    if st.sidebar.button("Regresión"):
-        aplicar_modelo_regresion(st.session_state['data'])
+if st.session_state['view'] == 'menu':
+    if 'data' not in st.session_state:
+        menu_opciones = ["Cargar Dataset Kaggle", "Cargar Dataset CSV"]
+        opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
+
+        if opcion == "Cargar Dataset Kaggle":
+            cargar_dataset_kaggle()
+        elif opcion == "Cargar Dataset CSV":
+            cargar_dataset_csv()
+    else:
+        st.write("Elige una opción de análisis:")
+        if st.button("EDA"):
+            st.session_state['view'] = 'eda'
+        if st.button("Regresión"):
+            st.session_state['view'] = 'regresion'
+elif st.session_state['view'] == 'eda':
+    realizar_eda(st.session_state['data'])
+elif st.session_state['view'] == 'regresion':
+    aplicar_modelo_regresion(st.session_state['data'])
