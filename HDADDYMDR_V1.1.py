@@ -113,7 +113,7 @@ def realizar_eda(data):
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
-        st.experimental_rerun()
+        st.rerun()
 
 # Función para realizar regresión
 def aplicar_modelo_regresion(data):
@@ -162,7 +162,7 @@ def aplicar_modelo_regresion(data):
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
-        st.experimental_rerun()
+        st.rerun()
 
 # Flujo principal de la aplicación
 if 'data' not in st.session_state:
