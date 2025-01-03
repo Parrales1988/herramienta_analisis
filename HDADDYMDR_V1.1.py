@@ -35,7 +35,7 @@ def cargar_dataset():
         else:
             try:
                 # Crear la carpeta .kaggle si no existe
-                kaggle_dir = os.path.join(os.path.expanduser("~"), ".kaggle")
+                kaggle_dir = os.path.join(os.path.expanduser("~"), ".config/kaggle")
                 if not os.path.exists(kaggle_dir):
                     os.makedirs(kaggle_dir)
 
