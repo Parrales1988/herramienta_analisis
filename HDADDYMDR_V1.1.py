@@ -58,7 +58,8 @@ def cargar_dataset_kaggle():
                 # Lectura del archivo CSV
                 dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
                 data = pd.read_csv(dataset_path)
-                return data
+                st.session_state['data'] = data
+                st.experimental_rerun()
             except Exception as e:
                 st.error(f"Error al descargar el dataset: {e}")
 
@@ -72,7 +73,8 @@ def cargar_dataset_csv():
             try:
                 data = pd.read_csv(uploaded_file)
                 st.success("Dataset cargado exitosamente.")
-                return data
+                st.session_state['data'] = data
+                st.experimental_rerun()
             except Exception as e:
                 st.error(f"Error al cargar el dataset: {e}")
         else:
@@ -138,21 +140,19 @@ def aplicar_modelo_regresion(data):
             st.write(coef_df)
 
 # Flujo principal de la aplicación
-menu_opciones = ["Cargar Dataset Kaggle", "Cargar Dataset CSV", "EDA", "Regresión"]
-opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
+if 'data' not in st.session_state:
+    menu_opciones = ["Cargar Dataset Kaggle", "Cargar Dataset CSV"]
+    opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
 
-data = None
-if opcion == "Cargar Dataset Kaggle":
-    data = cargar_dataset_kaggle()
-elif opcion == "Cargar Dataset CSV":
-    data = cargar_dataset_csv()
-elif opcion == "EDA":
-    if 'data' in st.session_state:
+    if opcion == "Cargar Dataset Kaggle":
+        cargar_dataset_kaggle()
+    elif opcion == "Cargar Dataset CSV":
+        cargar_dataset_csv()
+else:
+    menu_opciones = ["EDA", "Regresión"]
+    opcion = st.sidebar.selectbox("Seleccione una opción", menu_opciones)
+
+    if opcion == "EDA":
         realizar_eda(st.session_state['data'])
-    else:
-        st.error("Primero debe cargar un dataset.")
-elif opcion == "Regresión":
-    if 'data' in st.session_state:
+    elif opcion == "Regresión":
         aplicar_modelo_regresion(st.session_state['data'])
-    else:
-        st.error("Primero debe cargar un dataset.")
