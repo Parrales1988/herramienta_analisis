@@ -182,7 +182,3 @@ else:
     elif opcion == "Regresión":
         aplicar_modelo_regresion(st.session_state['data'])
 
-if st.button("Volver al Menú Principal"):
-        if 'data' in st.session_state:
-            del st.session_state['data']
-        st.experimental_rerun()
