@@ -111,7 +111,8 @@ def realizar_eda(data):
             st.error(f"Error al mostrar la correlación: {e}")
 
     if st.button("Volver al Menú Principal"):
-        st.session_state.pop('data', None)
+        if 'data' in st.session_state:
+            del st.session_state['data']
         st.experimental_rerun()
 
 # Función para realizar regresión
@@ -159,7 +160,8 @@ def aplicar_modelo_regresion(data):
             st.write(coef_df)
 
     if st.button("Volver al Menú Principal"):
-        st.session_state.pop('data', None)
+        if 'data' in st.session_state:
+            del st.session_state['data']
         st.experimental_rerun()
 
 # Flujo principal de la aplicación
