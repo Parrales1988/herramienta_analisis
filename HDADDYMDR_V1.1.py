@@ -89,7 +89,10 @@ def realizar_eda(data):
     st.dataframe(data.head())
 
     st.write("Información del dataset:")
-    st.text(data.info())
+    buffer = io.StringIO()
+    data.info(buf=buffer)
+    s = buffer.getvalue()
+    st.text(s)
 
     st.write("Estadísticas descriptivas:")
     st.write(data.describe())
@@ -116,6 +119,11 @@ def aplicar_modelo_regresion(data):
         else:
             X = data[features]
             y = data[target]
+
+            # Comprobar si hay valores nulos
+            if X.isnull().values.any() or y.isnull().values.any():
+                st.error("El dataset contiene valores nulos. Por favor, limpie los datos antes de proceder.")
+                return
 
             # División de datos
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
