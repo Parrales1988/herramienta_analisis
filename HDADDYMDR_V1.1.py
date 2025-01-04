@@ -53,24 +53,26 @@ def cargar_dataset_kaggle():
                 api = KaggleApi()
                 api.authenticate()
 
+                st.success("Ingrese exitosamente.")
+
                 # Verificar las credenciales
                 #user = api.get_user()
                 #st.success(f"Autenticado como {user}")
 
                 # Descarga del dataset
-                dataset_info = dataset_url.split('/')[-1]
-                api.dataset_download_files(dataset_info, path="datasets", unzip=True)
-                st.success("Dataset descargado exitosamente.")
+                #dataset_info = dataset_url.split('/')[-1]
+                #api.dataset_download_files(dataset_info, path="datasets", unzip=True)
+                #st.success("Dataset descargado exitosamente.")
 
                 # Lectura del archivo CSV
-                dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
-                data = pd.read_csv(dataset_path)
-                st.session_state['data'] = data
-                st.session_state['data_loaded'] = True
-            except ApiException as e:
-                st.error(f"Error al descargar el dataset: {e}")
-            except Exception as e:
-                st.error(f"Error al descargar el dataset: {e}")
+                #dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
+                #data = pd.read_csv(dataset_path)
+                #st.session_state['data'] = data
+                #st.session_state['data_loaded'] = True
+            #except ApiException as e:
+                #st.error(f"Error al descargar el dataset: {e}")
+            #except Exception as e:
+                #st.error(f"Error al descargar el dataset: {e}")
 
 # Función para cargar datasets desde un archivo CSV
 def cargar_dataset_csv():
