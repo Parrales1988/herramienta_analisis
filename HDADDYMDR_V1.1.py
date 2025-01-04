@@ -29,9 +29,9 @@ def cargar_dataset_kaggle():
     dataset_url = st.sidebar.text_input("Enlace del dataset (Kaggle)", "")
 
     if st.sidebar.button("Cargar Dataset desde Kaggle"):
-        #if not kaggle_username or not kaggle_key or not dataset_url:
-        #    st.error("Por favor, complete todos los campos.")
-        #else:
+        if not kaggle_username or not kaggle_key or not dataset_url:
+            st.error("Por favor, complete todos los campos.")
+        else:
             try:
                 # Crear la carpeta .kaggle si no existe
                 kaggle_dir = os.path.join(os.path.expanduser("~"), ".kaggle")
