@@ -57,9 +57,6 @@ def cargar_dataset_kaggle():
                 st.success("Conexión exitosa a Kaggle.")
 
                 # Descarga el dataset
-                #kaggle.api.dataset_download_files('https://www.kaggle.com/datasets/jackdaoud/marketing-data', path='.', unzip=True)
-
-                # Descarga del dataset utilizando el identificador correcto
                 dataset_info = "/".join(dataset_url.split('/')[-2:])
                 api.dataset_download_files(dataset_info, path=".", unzip=True)
                 st.success("Dataset descargado exitosamente.")
@@ -252,10 +249,10 @@ elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
 
 # Mantener el sidebar visible
-if st.session_state['view'] in ['eda', 'regresion']:
-    opciones = ["EDA", "Regresión"]
-    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="sidebar_option")
-    if opcion == "EDA":
-        st.session_state['view'] = 'eda'
-    elif opcion == "Regresión":
-        st.session_state['view'] = 'regresion'
+#if st.session_state['view'] in ['eda', 'regresion']:
+#    opciones = ["EDA", "Regresión"]
+#    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="sidebar_option")
+#    if opcion == "EDA":
+#        st.session_state['view'] = 'eda'
+#    elif opcion == "Regresión":
+#        st.session_state['view'] = 'regresion'
