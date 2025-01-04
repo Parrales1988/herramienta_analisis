@@ -74,6 +74,7 @@ def cargar_dataset_kaggle():
                             st.session_state['data'] = data
                             st.session_state['data_loaded'] = True
                             st.success("Dataset cargado exitosamente.")
+                            st.button("OK", type="primary")
                             break
                 else:
                     st.error("Archivo CSV no encontrado.")
@@ -92,6 +93,7 @@ def cargar_dataset_csv():
             try:
                 data = pd.read_csv(uploaded_file)
                 st.success("Dataset cargado exitosamente.")
+                st.button("OK", type="primary")
                 st.session_state['data'] = data
                 st.session_state['data_loaded'] = True
             except Exception as e:
