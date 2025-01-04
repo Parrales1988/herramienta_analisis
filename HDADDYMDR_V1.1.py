@@ -71,13 +71,15 @@ def cargar_dataset_kaggle():
                         st.write(file_name)
                 
                 # Intentar leer el archivo CSV
-                dataset_path = f"file_name"
-                if os.path.exists(dataset_path):
-                    data = pd.read_csv(dataset_path)
-                    st.session_state['data'] = data
-                    st.session_state['data_loaded'] = True
+                        dataset_path = os.path.join(".", file_name)
+                        if os.path.exists(dataset_path):
+                            data = pd.read_csv(dataset_path)
+                            st.session_state['data'] = data
+                            st.session_state['data_loaded'] = True
+                            st.write("Dataset cargado exitosamente.")
+                            break
                 else:
-                    st.error(f"Archivo no encontrado: {dataset_path}")
+                    st.error("Archivo CSV no encontrado.")
             except ApiException as e:
                 st.error(f"Error al descargar el dataset: {e}")
             except Exception as e:
