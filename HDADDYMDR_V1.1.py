@@ -110,10 +110,11 @@ def realizar_eda(data):
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
-    if st.button("Volver al Menú Principal"):
+    if st.sidebar.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
+        st.experimental_rerun()
 
 # Función para realizar regresión
 def aplicar_modelo_regresion(data):
@@ -173,10 +174,11 @@ def aplicar_modelo_regresion(data):
             except Exception as e:
                 st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
-    if st.button("Volver al Menú Principal"):
+    if st.sidebar.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
+        st.experimental_rerun()
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
@@ -192,11 +194,13 @@ if st.session_state['view'] == 'menu':
         elif opcion == "Cargar Dataset CSV":
             cargar_dataset_csv()
     else:
-        st.write("Elige una opción de análisis:")
-        if st.button("EDA"):
+        st.sidebar.write("Elige una opción de análisis:")
+        if st.sidebar.button("EDA"):
             st.session_state['view'] = 'eda'
-        if st.button("Regresión"):
+            st.experimental_rerun()
+        if st.sidebar.button("Regresión"):
             st.session_state['view'] = 'regresion'
+            st.experimental_rerun()
 elif st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
