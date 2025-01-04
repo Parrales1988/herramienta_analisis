@@ -110,8 +110,9 @@ def realizar_eda(data):
             
             corr = data_numeric.corr()
             st.write("Matriz de correlación:")
-            sns.heatmap(corr, annot=True, cmap="coolwarm")
-            st.pyplot()
+            fig, ax = plt.subplots()
+            sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
+            st.pyplot(fig)
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
