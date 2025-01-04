@@ -54,8 +54,8 @@ def cargar_dataset_kaggle():
                 api.authenticate()
 
                 # Verificar las credenciales
-                user = api.get_user()
-                st.success(f"Autenticado como {user}")
+                #user = api.get_user()
+                #st.success(f"Autenticado como {user}")
 
                 # Descarga del dataset
                 dataset_info = dataset_url.split('/')[-1]
