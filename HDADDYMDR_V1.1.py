@@ -211,3 +211,12 @@ if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
+
+# Mantener el sidebar visible
+if st.session_state['view'] in ['eda', 'regresion']:
+    opciones = ["EDA", "Regresión"]
+    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones)
+    if opcion == "EDA":
+        st.session_state['view'] = 'eda'
+    elif opcion == "Regresión":
+        st.session_state['view'] = 'regresion'
