@@ -76,7 +76,7 @@ def cargar_dataset_kaggle():
                             data = pd.read_csv(dataset_path)
                             st.session_state['data'] = data
                             st.session_state['data_loaded'] = True
-                            st.write("Dataset cargado exitosamente.")
+                            st.success("Dataset cargado exitosamente.")
                             break
                 else:
                     st.error("Archivo CSV no encontrado.")
