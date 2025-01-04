@@ -156,9 +156,9 @@ def aplicar_modelo_regresion(data):
                 return
 
             # Verificar si hay suficientes datos para dividir
-            #if len(X) < 2:
-            #    st.error("No hay suficientes datos para dividir en conjuntos de entrenamiento y prueba. Seleccione diferentes columnas.")
-            #    return
+            if len(X) < 2:
+                st.error("No hay suficientes datos para dividir en conjuntos de entrenamiento y prueba. Seleccione diferentes columnas.")
+                return
 
             # División de datos
             try:
