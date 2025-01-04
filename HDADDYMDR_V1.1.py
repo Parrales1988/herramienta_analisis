@@ -11,6 +11,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from kaggle.api.kaggle_api_extended import KaggleApi
 from kaggle.rest import ApiException
+from fpdf import FPDF
 
 # Configuración inicial
 st.title("Herramienta de análisis de datos y modelos de regresión")
@@ -231,6 +232,51 @@ def aplicar_modelo_regresion(data):
             del st.session_state['data']
         st.session_state['view'] = 'menu'
 
+# Función para crear y exportar informe ejecutivo
+def crear_informe_ejecutivo(data, results):
+    pdf = FPDF()
+    pdf.add_page()
+
+    # Título del informe
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="Informe Ejecutivo del Análisis de Datos", ln=True, align='C')
+    pdf.ln(10)
+
+    # Primeras filas del dataset
+    pdf.set_font("Arial", size=10)
+    pdf.cell(200, 10, txt="Primeras filas del dataset:", ln=True)
+    pdf.ln(5)
+    for i, row in data.head().iterrows():
+        pdf.cell(200, 10, txt=str(row.values), ln=True)
+    pdf.ln(10)
+
+    # Información del dataset
+    buffer = io.StringIO()
+    data.info(buf=buffer)
+    info = buffer.getvalue()
+    pdf.cell(200, 10, txt="Información del dataset:", ln=True)
+    pdf.ln(5)
+    pdf.multi_cell(200, 10, txt=info)
+    pdf.ln(10)
+
+    # Estadísticas descriptivas
+    pdf.cell(200, 10, txt="Estadísticas descriptivas:", ln=True)
+    pdf.ln(5)
+    for col, val in data.describe().iterrows():
+        pdf.cell(200, 10, txt=f"{col}: {val.values}", ln=True)
+    pdf.ln(10)
+
+    # Resultados del modelo de regresión
+    if results:
+        pdf.cell(200, 10, txt="Resultados del Modelo de Regresión:", ln=True)
+        pdf.ln(5)
+        for key, value in results.items():
+            pdf.cell(200, 10, txt=f"{key}: {value}", ln=True)
+    
+    # Guardar el PDF
+    pdf.output("informe_ejecutivo.pdf")
+    st.success("Informe ejecutivo creado y guardado como 'informe_ejecutivo.pdf'")
+
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
     st.session_state['view'] = 'menu'
@@ -260,3 +306,12 @@ if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
+
+# Botón para generar informe ejecutivo
+if st.session_state['view'] == 'analisis' and st.button("Crear Informe Ejecutivo"):
+    results = {
+        "MSE": st.session_state.get("mse"),
+        "R2": st.session_state.get("r2"),
+        "Coeficientes": st.session_state.get("coef_df")
+    }
+    crear_informe_ejecutivo(st.session_state['data'], results)
