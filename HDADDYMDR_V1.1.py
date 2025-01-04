@@ -55,25 +55,25 @@ def cargar_dataset_kaggle():
 
                 st.success("Ingrese exitosamente.")
                 # Listar datasets de Kaggle
-                datasets = api.dataset_list(page_size=10)  # Puedes ajustar el page_size según tus necesidades
+                datasets = api.dataset_list(page=1)  # Ajusta el número de página según tus necesidades
                 dataset_titles = [dataset.title for dataset in datasets]
                 st.write("Lista de datasets disponibles en Kaggle:")
                 st.write(dataset_titles)
 
                 # Verificar las credenciales
-                #user = api.get_user()
-                #st.success(f"Autenticado como {user}")
+                # user = api.get_user()
+                # st.success(f"Autenticado como {user}")
 
                 # Descarga del dataset
-                #dataset_info = dataset_url.split('/')[-1]
-                #api.dataset_download_files(dataset_info, path="datasets", unzip=True)
-                #st.success("Dataset descargado exitosamente.")
+                # dataset_info = dataset_url.split('/')[-1]
+                # api.dataset_download_files(dataset_info, path="datasets", unzip=True)
+                # st.success("Dataset descargado exitosamente.")
 
                 # Lectura del archivo CSV
-                #dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
-                #data = pd.read_csv(dataset_path)
-                #st.session_state['data'] = data
-                #st.session_state['data_loaded'] = True
+                # dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
+                # data = pd.read_csv(dataset_path)
+                # st.session_state['data'] = data
+                # st.session_state['data_loaded'] = True
             except ApiException as e:
                 st.error(f"Error al descargar el dataset: {e}")
             except Exception as e:
