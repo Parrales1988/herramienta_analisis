@@ -138,6 +138,10 @@ def realizar_eda(data):
     if st.session_state['view'] == 'analisis':
     opciones = ["EDA", "Regresión"]
     opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
+        if opcion == "EDA":
+            st.session_state['view'] = 'eda'
+        elif opcion == "Regresión":
+            st.session_state['view'] = 'regresion'
 
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
@@ -223,6 +227,10 @@ def aplicar_modelo_regresion(data):
     if st.session_state['view'] == 'analisis':
     opciones = ["EDA", "Regresión"]
     opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
+        if opcion == "EDA":
+            st.session_state['view'] = 'eda'
+        elif opcion == "Regresión":
+            st.session_state['view'] = 'regresion'    
 
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
