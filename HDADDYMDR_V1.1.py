@@ -57,7 +57,7 @@ def cargar_dataset_kaggle():
                 st.success("Conexión exitosa a Kaggle.")
 
                 # Descarga el dataset
-                kaggle.api.dataset_download_files('https://www.kaggle.com/datasets/jackdaoud/marketing-data', path='.', unzip=True)
+                #kaggle.api.dataset_download_files('https://www.kaggle.com/datasets/jackdaoud/marketing-data', path='.', unzip=True)
 
                 # Descarga del dataset utilizando el identificador correcto
                 dataset_info = "/".join(dataset_url.split('/')[-2:])
