@@ -135,14 +135,6 @@ def realizar_eda(data):
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
-    if st.session_state['view'] == 'analisis':
-    opciones = ["EDA", "Regresión"]
-    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
-        if opcion == "EDA":
-            st.session_state['view'] = 'eda'
-        elif opcion == "Regresión":
-            st.session_state['view'] = 'regresion'
-
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
@@ -222,15 +214,7 @@ def aplicar_modelo_regresion(data):
                 coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
                 st.write(coef_df)
             except Exception as e:
-                st.error(f"Error al entrenar o evaluar el modelo: {e}")
-
-    if st.session_state['view'] == 'analisis':
-    opciones = ["EDA", "Regresión"]
-    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
-        if opcion == "EDA":
-            st.session_state['view'] = 'eda'
-        elif opcion == "Regresión":
-            st.session_state['view'] = 'regresion'    
+                st.error(f"Error al entrenar o evaluar el modelo: {e}")  
 
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
