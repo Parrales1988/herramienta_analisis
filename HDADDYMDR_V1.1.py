@@ -69,10 +69,10 @@ def cargar_dataset_kaggle():
                 #data = pd.read_csv(dataset_path)
                 #st.session_state['data'] = data
                 #st.session_state['data_loaded'] = True
-            #except ApiException as e:
-                #st.error(f"Error al descargar el dataset: {e}")
-            #except Exception as e:
-                #st.error(f"Error al descargar el dataset: {e}")
+            except ApiException as e:
+                st.error(f"Error al descargar el dataset: {e}")
+            except Exception as e:
+                st.error(f"Error al descargar el dataset: {e}")
 
 # Función para cargar datasets desde un archivo CSV
 def cargar_dataset_csv():
