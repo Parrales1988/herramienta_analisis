@@ -122,15 +122,28 @@ def realizar_eda(data):
             del st.session_state['data']
         st.session_state['view'] = 'menu'
 
+# Función para validar columnas para regresión
+def validar_columnas_para_regresion(data):
+    columnas_validas = []
+    for column in data.columns:
+        if pd.api.types.is_numeric_dtype(data[column]):
+            if data[column].isnull().sum() == 0:
+                columnas_validas.append(column)
+    return columnas_validas
+
 # Función para realizar regresión
 def aplicar_modelo_regresion(data):
     st.subheader("Aplicación de Modelo de Regresión")
     st.write("En esta sección puedes construir un modelo de regresión lineal para analizar tus datos.")
     st.write("Podrás observar los coeficientes del modelo, que indican la influencia de cada variable predictora en la variable objetivo.")
     st.write("También se calculan métricas como el Error Cuadrático Medio (MSE) para medir la precisión y el Coeficiente de Determinación (R^2) para evaluar la calidad del ajuste del modelo.")
+    
+    columnas_validas = validar_columnas_para_regresion(data)
+    st.write("Columnas válidas para regresión:")
+    st.write(columnas_validas)
 
-    target = st.selectbox("Seleccione la variable objetivo (Y):", options=data.columns, key="target")
-    features = st.multiselect("Seleccione las variables predictoras (X):", options=data.columns, key="features")
+    target = st.selectbox("Seleccione la variable objetivo (Y):", options=columnas_validas, key="target")
+    features = st.multiselect("Seleccione las variables predictoras (X):", options=columnas_validas, key="features")
 
     if st.button("Ejecutar Regresión"):
         if not target or not features:
