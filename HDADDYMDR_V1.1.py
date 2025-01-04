@@ -17,32 +17,32 @@ st.sidebar.header("Menú")
 # Función para cargar datasets desde Kaggle
 def cargar_dataset_kaggle():
     st.sidebar.subheader("Importar Dataset desde Kaggle")
+    st.sidebar.write("Ingrese sus credenciales de Kaggle:")
+    kaggle_username = st.sidebar.text_input("Nombre de usuario de Kaggle", "")
+    kaggle_key = st.sidebar.text_input("Clave API de Kaggle", "", type="password")
+    
     st.sidebar.write("Para obtener el enlace del dataset, accede a Kaggle, elige un dataset, y copia la URL desde el navegador.")
     st.sidebar.write("Ejemplo de enlace correcto: https://www.kaggle.com/dataset-owner/dataset-name")
     dataset_url = st.sidebar.text_input("Enlace del dataset (Kaggle)", "")
-    
-    st.sidebar.write("Para autenticarte, sube el archivo kaggle.json que contiene tus credenciales de Kaggle.")
-    st.sidebar.write("Para generar el archivo kaggle.json, sigue estos pasos:")
-    st.sidebar.write("1. Ve a [Kaggle](https://www.kaggle.com/) y accede a tu cuenta.")
-    st.sidebar.write("2. Navega a la sección de tu perfil y selecciona 'Account'.")
-    st.sidebar.write("3. Desplázate hacia abajo hasta encontrar la sección 'API' y haz clic en 'Create New API Token'. Esto descargará el archivo kaggle.json.")
-    
-    kaggle_json = st.sidebar.file_uploader("Sube tu archivo kaggle.json", type="json")
 
     if st.sidebar.button("Cargar Dataset desde Kaggle"):
-        if not dataset_url or not kaggle_json:
-            st.error("Por favor, complete todos los campos y suba el archivo kaggle.json.")
+        if not kaggle_username or not kaggle_key or not dataset_url:
+            st.error("Por favor, complete todos los campos.")
         else:
             try:
                 # Crear la carpeta .kaggle si no existe
-                kaggle_dir = os.path.join(os.path.expanduser("~"), ".kaggle/kaggle")
+                kaggle_dir = os.path.join(os.path.expanduser("~"), ".kaggle")
                 if not os.path.exists(kaggle_dir):
                     os.makedirs(kaggle_dir)
 
-                # Guardar el archivo kaggle.json
+                # Crear el archivo kaggle.json con las credenciales
                 kaggle_json_path = os.path.join(kaggle_dir, "kaggle.json")
-                with open(kaggle_json_path, "wb") as f:
-                    f.write(kaggle_json.getbuffer())
+                kaggle_json_content = {
+                    "username": kaggle_username,
+                    "key": kaggle_key
+                }
+                with open(kaggle_json_path, "w") as f:
+                    json.dump(kaggle_json_content, f)
 
                 # Establecer permisos correctos al archivo kaggle.json
                 os.chmod(kaggle_json_path, 0o600)
