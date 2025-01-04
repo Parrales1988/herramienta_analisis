@@ -54,21 +54,21 @@ def cargar_dataset_kaggle():
                 api = KaggleApi()
                 api.authenticate()
 
-                st.success("Ingrese exitosamente.")
+                st.success("Conexión exitosa a Kaggle.")
 
                 # Descarga el dataset
                 #kaggle.api.dataset_download_files('https://www.kaggle.com/datasets/jackdaoud/marketing-data', path='.', unzip=True)
 
                 # Descarga del dataset
-                dataset_info = dataset_url.split('/')[-1]
-                api.dataset_download_files(dataset_info, path=".", unzip=True)
-                st.success("Dataset descargado exitosamente.")
+                #dataset_info = dataset_url.split('/')[-1]
+                #api.dataset_download_files(dataset_info, path=".", unzip=True)
+                #st.success("Dataset descargado exitosamente.")
 
                 # Lectura del archivo CSV
-                dataset_path = f"./{dataset_info.split('/')[-1]}.csv"
-                data = pd.read_csv(dataset_path)
-                st.session_state['data'] = data
-                st.session_state['data_loaded'] = True
+                #dataset_path = f"./{dataset_info.split('/')[-1]}.csv"
+                #data = pd.read_csv(dataset_path)
+                #st.session_state['data'] = data
+                #st.session_state['data_loaded'] = True
             except ApiException as e:
                 st.error(f"Error al descargar el dataset: {e}")
             except Exception as e:
