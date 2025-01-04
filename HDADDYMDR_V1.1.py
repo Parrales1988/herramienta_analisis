@@ -101,10 +101,11 @@ def realizar_eda(data):
     st.write("Estadísticas descriptivas:")
     st.write(data.describe())
 
-    if st.checkbox("Mostrar correlación entre variables"):
+    selected_columns = st.multiselect("Seleccione las columnas para calcular la correlación:", options=data.columns)
+    if st.checkbox("Mostrar correlación entre variables") and selected_columns:
         try:
             # Convertir columnas categóricas a numéricas
-            data_numeric = data.copy()
+            data_numeric = data[selected_columns].copy()
             for column in data_numeric.select_dtypes(include=['object']).columns:
                 data_numeric[column] = data_numeric[column].astype('category').cat.codes
             
