@@ -117,7 +117,7 @@ def realizar_eda(data):
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
-    if st.sidebar.button("Volver al Menú Principal"):
+    if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
@@ -180,7 +180,7 @@ def aplicar_modelo_regresion(data):
             except Exception as e:
                 st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
-    if st.sidebar.button("Volver al Menú Principal"):
+    if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
