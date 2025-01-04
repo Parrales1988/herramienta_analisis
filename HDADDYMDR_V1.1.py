@@ -103,7 +103,12 @@ def realizar_eda(data):
 
     if st.checkbox("Mostrar correlación entre variables"):
         try:
-            corr = data.corr()
+            # Convertir columnas categóricas a numéricas
+            data_numeric = data.copy()
+            for column in data_numeric.select_dtypes(include=['object']).columns:
+                data_numeric[column] = data_numeric[column].astype('category').cat.codes
+            
+            corr = data_numeric.corr()
             st.write("Matriz de correlación:")
             sns.heatmap(corr, annot=True, cmap="coolwarm")
             st.pyplot()
