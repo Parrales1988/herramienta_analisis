@@ -135,11 +135,6 @@ def realizar_eda(data):
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
-    if st.button("Volver al Menú Principal"):
-        if 'data' in st.session_state:
-            del st.session_state['data']
-        st.session_state['view'] = 'menu'
-
 # Función para validar columnas para regresión
 def validar_columnas_para_regresion(data):
     columnas_validas = []
@@ -214,7 +209,7 @@ def aplicar_modelo_regresion(data):
                 coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
                 st.write(coef_df)
             except Exception as e:
-                st.error(f"Error al entrenar o evaluar el modelo: {e}")  
+                st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
@@ -245,6 +240,14 @@ if st.session_state['view'] == 'analisis':
         st.session_state['view'] = 'eda'
     elif opcion == "Regresión":
         st.session_state['view'] = 'regresion'
+
+# Mantener el sidebar visible
+opciones = ["EDA", "Regresión"]
+opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="sidebar_option")
+if opcion == "EDA":
+    st.session_state['view'] = 'eda'
+elif opcion == "Regresión":
+    st.session_state['view'] = 'regresion'
 
 if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
