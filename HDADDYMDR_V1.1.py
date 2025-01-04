@@ -67,6 +67,7 @@ def cargar_dataset_kaggle():
                 # Mostrar lista de archivos descargados para verificar el nombre correcto
                 st.write("Archivos descargados:")
                 for file_name in os.listdir("."):
+                    st.write(file_name)
                     if file_name.endswith(".csv"):
                         st.write(file_name)
                 
