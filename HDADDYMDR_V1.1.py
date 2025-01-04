@@ -71,7 +71,7 @@ def cargar_dataset_kaggle():
                         st.write(file_name)
                 
                 # Intentar leer el archivo CSV
-                dataset_path = f"./{dataset_info.split('/')[-1]}.csv"
+                dataset_path = f"file_name"
                 if os.path.exists(dataset_path):
                     data = pd.read_csv(dataset_path)
                     st.session_state['data'] = data
