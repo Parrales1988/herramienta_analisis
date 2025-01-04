@@ -135,6 +135,10 @@ def realizar_eda(data):
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
+    if st.session_state['view'] == 'analisis':
+    opciones = ["EDA", "Regresión"]
+    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
+
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
             del st.session_state['data']
@@ -215,6 +219,10 @@ def aplicar_modelo_regresion(data):
                 st.write(coef_df)
             except Exception as e:
                 st.error(f"Error al entrenar o evaluar el modelo: {e}")
+
+    if st.session_state['view'] == 'analisis':
+    opciones = ["EDA", "Regresión"]
+    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
 
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
