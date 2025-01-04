@@ -60,7 +60,7 @@ def cargar_dataset_kaggle():
                 dataset_path = f"datasets/{dataset_info.split('/')[-1]}.csv"
                 data = pd.read_csv(dataset_path)
                 st.session_state['data'] = data
-                st.session_state['data_loaded'] = "true"
+                st.session_state['data_loaded'] = True
             except Exception as e:
                 st.error(f"Error al descargar el dataset: {e}")
 
@@ -75,7 +75,7 @@ def cargar_dataset_csv():
                 data = pd.read_csv(uploaded_file)
                 st.success("Dataset cargado exitosamente.")
                 st.session_state['data'] = data
-                st.session_state['data_loaded'] = "true"
+                st.session_state['data_loaded'] = True
             except Exception as e:
                 st.error(f"Error al cargar el dataset: {e}")
         else:
@@ -114,7 +114,6 @@ def realizar_eda(data):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
-        st.experimental_rerun()
 
 # Función para realizar regresión
 def aplicar_modelo_regresion(data):
@@ -178,7 +177,6 @@ def aplicar_modelo_regresion(data):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
-        st.experimental_rerun()
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
@@ -194,14 +192,15 @@ if st.session_state['view'] == 'menu':
         elif opcion == "Cargar Dataset CSV":
             cargar_dataset_csv()
     else:
-        st.sidebar.write("Elige una opción de análisis:")
-        if st.sidebar.button("EDA"):
+        opciones = ["EDA", "Regresión"]
+        opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones)
+
+        if opcion == "EDA":
             st.session_state['view'] = 'eda'
-            st.experimental_rerun()
-        if st.sidebar.button("Regresión"):
+        elif opcion == "Regresión":
             st.session_state['view'] = 'regresion'
-            st.experimental_rerun()
-elif st.session_state['view'] == 'eda':
+
+if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
