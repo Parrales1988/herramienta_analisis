@@ -4,11 +4,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 import io
-import json  # <- Agrega esta línea
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
+import json
 from kaggle.api.kaggle_api_extended import KaggleApi
+from kaggle.rest import ApiException
 
 # Configuración inicial
 st.title("Herramienta de análisis de datos y modelos de regresión")
@@ -52,6 +50,10 @@ def cargar_dataset_kaggle():
                 api = KaggleApi()
                 api.authenticate()
 
+                # Verificar las credenciales
+                user = api.get_user()
+                st.success(f"Autenticado como {user}")
+
                 # Descarga del dataset
                 dataset_info = dataset_url.split('/')[-1]
                 api.dataset_download_files(dataset_info, path="datasets", unzip=True)
@@ -62,6 +64,8 @@ def cargar_dataset_kaggle():
                 data = pd.read_csv(dataset_path)
                 st.session_state['data'] = data
                 st.session_state['data_loaded'] = True
+            except ApiException as e:
+                st.error(f"Error al descargar el dataset: {e}")
             except Exception as e:
                 st.error(f"Error al descargar el dataset: {e}")
 
