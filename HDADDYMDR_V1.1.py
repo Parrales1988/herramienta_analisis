@@ -54,7 +54,11 @@ def cargar_dataset_kaggle():
                 api.authenticate()
 
                 st.success("Ingrese exitosamente.")
-                !kaggle DataSets list
+                # Listar datasets de Kaggle
+                datasets = api.dataset_list(page_size=10)  # Puedes ajustar el page_size según tus necesidades
+                dataset_titles = [dataset.title for dataset in datasets]
+                st.write("Lista de datasets disponibles en Kaggle:")
+                st.write(dataset_titles)
 
                 # Verificar las credenciales
                 #user = api.get_user()
