@@ -95,7 +95,11 @@ def cargar_dataset_csv():
     if st.sidebar.button("Cargar Dataset desde CSV"):
         if uploaded_file is not None:
             try:
-                data = pd.read_csv(uploaded_file)
+                with st.spinner('Cargando dataset...'):
+                    progress_bar = st.progress(0)
+                    data = pd.read_csv(uploaded_file)
+                    for percent_complete in range(100):
+                        progress_bar.progress(percent_complete + 1)
                 st.success("Dataset cargado exitosamente.")
                 st.button("OK", type="primary")
                 st.session_state['data'] = data
