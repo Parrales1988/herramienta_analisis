@@ -235,24 +235,18 @@ if st.session_state['view'] == 'menu':
         elif opcion == "Cargar Dataset CSV":
             cargar_dataset_csv()
     else:
-        opciones = ["EDA", "Regresión"]
-        opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
+        st.session_state['view'] = 'analisis'
 
-        if opcion == "EDA":
-            st.session_state['view'] = 'eda'
-        elif opcion == "Regresión":
-            st.session_state['view'] = 'regresion'
+if st.session_state['view'] == 'analisis':
+    opciones = ["EDA", "Regresión"]
+    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
+
+    if opcion == "EDA":
+        st.session_state['view'] = 'eda'
+    elif opcion == "Regresión":
+        st.session_state['view'] = 'regresion'
 
 if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
-
-# Mantener el sidebar visible
-#if st.session_state['view'] in ['eda', 'regresion']:
-#    opciones = ["EDA", "Regresión"]
-#    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="sidebar_option")
-#    if opcion == "EDA":
-#        st.session_state['view'] = 'eda'
-#    elif opcion == "Regresión":
-#        st.session_state['view'] = 'regresion'
