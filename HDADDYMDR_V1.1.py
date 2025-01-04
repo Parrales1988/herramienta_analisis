@@ -58,7 +58,11 @@ def cargar_dataset_kaggle():
 
                 # Descarga el dataset
                 dataset_info = "/".join(dataset_url.split('/')[-2:])
-                api.dataset_download_files(dataset_info, path=".", unzip=True)
+                with st.spinner('Descargando dataset...'):
+                    progress_bar = st.progress(0)
+                    for i in range(100):
+                        api.dataset_download_files(dataset_info, path=".", unzip=True)
+                        progress_bar.progress(i + 1)
                 st.success("Dataset descargado exitosamente.")
                 
                 # Mostrar lista de archivos descargados para verificar el nombre correcto
