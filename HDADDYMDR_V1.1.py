@@ -129,8 +129,8 @@ def aplicar_modelo_regresion(data):
     st.write("Podrás observar los coeficientes del modelo, que indican la influencia de cada variable predictora en la variable objetivo.")
     st.write("También se calculan métricas como el Error Cuadrático Medio (MSE) para medir la precisión y el Coeficiente de Determinación (R^2) para evaluar la calidad del ajuste del modelo.")
 
-    target = st.selectbox("Seleccione la variable objetivo (Y):", options=data.columns)
-    features = st.multiselect("Seleccione las variables predictoras (X):", options=data.columns)
+    target = st.selectbox("Seleccione la variable objetivo (Y):", options=data.columns, key="target")
+    features = st.multiselect("Seleccione las variables predictoras (X):", options=data.columns, key="features")
 
     if st.button("Ejecutar Regresión"):
         if not target or not features:
@@ -153,6 +153,11 @@ def aplicar_modelo_regresion(data):
                 y = y[X.index]
             except Exception as e:
                 st.error(f"Error al convertir datos a numéricos: {e}")
+                return
+
+            # Verificar si hay suficientes datos para dividir
+            if len(X) < 2:
+                st.error("No hay suficientes datos para dividir en conjuntos de entrenamiento y prueba. Seleccione diferentes columnas.")
                 return
 
             # División de datos
@@ -200,7 +205,7 @@ if st.session_state['view'] == 'menu':
             cargar_dataset_csv()
     else:
         opciones = ["EDA", "Regresión"]
-        opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones)
+        opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
 
         if opcion == "EDA":
             st.session_state['view'] = 'eda'
@@ -215,7 +220,7 @@ elif st.session_state['view'] == 'regresion':
 # Mantener el sidebar visible
 if st.session_state['view'] in ['eda', 'regresion']:
     opciones = ["EDA", "Regresión"]
-    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones)
+    opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="sidebar_option")
     if opcion == "EDA":
         st.session_state['view'] = 'eda'
     elif opcion == "Regresión":
