@@ -30,7 +30,7 @@ def cargar_dataset_kaggle():
     dataset_url = st.sidebar.text_input("Enlace del dataset (Kaggle)", "")
 
     if st.sidebar.button("Cargar Dataset desde Kaggle"):
-        if not kaggle_username or not kaggle key or not dataset_url:
+        if not kaggle_username or not kaggle_key or not dataset_url:
             st.error("Por favor, complete todos los campos.")
         else:
             try:
@@ -61,7 +61,7 @@ def cargar_dataset_kaggle():
                 dataset_info = "/".join(dataset_url.split('/')[-2:])
                 with st.spinner('Descargando dataset...'):
                     progress_bar = st.progress(0)
-                    for i in range 100):
+                    for i in range(100):
                         api.dataset_download_files(dataset_info, path=".", unzip=True)
                         progress_bar.progress(i + 1)
                 st.success("Dataset descargado exitosamente.")
@@ -99,7 +99,7 @@ def cargar_dataset_csv():
                 with st.spinner('Cargando dataset...'):
                     progress_bar = st.progress(0)
                     data = pd.read_csv(uploaded_file)
-                    for percent_complete in range 100):
+                    for percent_complete in range(100):
                         progress_bar.progress(percent_complete + 1)
                 st.success("Dataset cargado exitosamente.")
                 st.button("OK", type="primary")
@@ -232,6 +232,19 @@ def aplicar_modelo_regresion(data):
                 st.session_state['mse'] = mse
                 st.session_state['r2'] = r2
                 st.session_state['coef_df'] = coef_df
+
+                # Mostrar resultados
+                st.subheader("Resultados del Modelo de Regresión Lineal")
+                st.write("### Coeficientes del Modelo")
+                st.write(coef_df)
+
+                st.write("### Métricas del Modelo")
+                st.write(f"Error Cuadrático Medio (MSE): {mse}")
+                st.write(f"Coeficiente de Determinación (R^2): {r2}")
+
+                st.write("### Predicciones")
+                st.write(pd.DataFrame({"Real": y_test, "Predicción": y_pred}).head())
+                
             except Exception as e:
                 st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
@@ -291,8 +304,7 @@ def crear_informe_ejecutivo(data, results):
     
     # Guardar el PDF en un buffer de bytes
     pdf_buffer = io.BytesIO()
-    pdf.output(dest='S').encode('latin1')
-    pdf_buffer.write(pdf.output(dest='S').encode('latin1'))
+    pdf.output(pdf_buffer, 'F')
     pdf_buffer.seek(0)
     
     # Mostrar el enlace de descarga en Streamlit
