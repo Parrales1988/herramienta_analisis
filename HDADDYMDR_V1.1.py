@@ -307,10 +307,7 @@ def crear_informe_ejecutivo(data, results):
         mime="application/pdf"
     )
     
-    if st.button("Volver al Menú Principal"):
-        if 'data' in st.session_state:
-            del st.session_state['data']
-        st.session_state['view'] = 'menu'
+    st.button("Volver al Menú Principal")
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
@@ -351,3 +348,4 @@ elif st.session_state['view'] == 'informe':
             "Coeficientes": st.session_state.get("coef_df")
         }
         crear_informe_ejecutivo(st.session_state['data'], results)
+    st.button("Volver al Menú Principal")
