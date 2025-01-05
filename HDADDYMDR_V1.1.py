@@ -275,7 +275,7 @@ def crear_informe_ejecutivo(data, results):
     info = buffer.getvalue()
     pdf.cell(200, 10, txt="Información del dataset:", ln=True)
     pdf.ln(5)
-    pdf.multi_cell(0, 10, txt=info)
+    pdf.multi_cell(0, 10, txt=info[:1000])  # Limitar a 1000 caracteres para no exceder el formato A4
     pdf.ln(10)
 
     # Estadísticas descriptivas
@@ -304,7 +304,7 @@ def crear_informe_ejecutivo(data, results):
         buf.seek(0)
 
         # Añadir la imagen al PDF
-        pdf.image(buf, x=None, y=None, w=0, h=0, type='PNG')
+        pdf.image(buf, x=None, y=None, w=180, h=0, type='PNG')
         buf.close()
 
     # Guardar el PDF en un buffer de bytes
