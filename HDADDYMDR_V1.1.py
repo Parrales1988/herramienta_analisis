@@ -309,9 +309,15 @@ def crear_informe_ejecutivo(data, results):
         canvas.print_png(buf)
         buf.seek(0)
 
+        # Guardar la imagen en el sistema de archivos temporal
+        with open("temp.png", "wb") as f:
+            f.write(buf.getbuffer())
+
         # Añadir la imagen al PDF
-        pdf.image(buf, x=None, y=None, w=180, h=0, type='PNG')
-        buf.close()
+        pdf.image("temp.png", x=None, y=None, w=180, h=0, type='PNG')
+
+        # Eliminar el archivo temporal
+        os.remove("temp.png")
 
     # Guardar el PDF en un buffer de bytes
     pdf_buffer = io.BytesIO()
