@@ -304,7 +304,7 @@ def crear_informe_ejecutivo(data, results):
     
     # Guardar el PDF en un buffer de bytes
     pdf_buffer = io.BytesIO()
-    pdf.output(pdf_buffer, 'F')
+    pdf.output(pdf_buffer)
     pdf_buffer.seek(0)
     
     # Mostrar el enlace de descarga en Streamlit
@@ -338,15 +338,13 @@ if st.session_state['view'] == 'menu':
         st.session_state['view'] = 'analisis'
 
 if st.session_state['view'] == 'analisis' or st.session_state['view'] in ['eda', 'regresion']:
-    opciones = ["EDA", "Regresión", "Crear Informe Ejecutivo"]
+    opciones = ["EDA", "Regresión"]
     opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
 
     if opcion == "EDA":
         st.session_state['view'] = 'eda'
     elif opcion == "Regresión":
         st.session_state['view'] = 'regresion'
-    elif opcion == "Crear Informe Ejecutivo":
-        st.session_state['view'] = 'informe'
 
 if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
@@ -363,9 +361,13 @@ elif st.session_state['view'] == 'informe':
 
 # Botón para generar informe ejecutivo
 if st.session_state['view'] == 'analisis' and st.button("Crear Informe Ejecutivo"):
-    results = {
-        "MSE": st.session_state.get("mse"),
-        "R2": st.session_state.get("r2"),
-        "Coeficientes": st.session_state.get("coef_df")
-    }
-    crear_informe_ejecutivo(st.session_state['data'], results)
+    st.session_state['view'] = 'informe'
+
+if st.session_state['view'] == 'informe':
+    if st.button("Generar Informe Ejecutivo"):
+        results = {
+            "MSE": st.session_state.get("mse"),
+            "R2": st.session_state.get("r2"),
+            "Coeficientes": st.session_state.get("coef_df")
+        }
+        crear_informe_ejecutivo(st.session_state['data'], results)
