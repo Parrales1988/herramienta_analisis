@@ -150,6 +150,9 @@ def realizar_eda(data):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
+    
+    if st.button("Crear Informe Ejecutivo"):
+        st.session_state['view'] = 'informe'
 
 # Función para validar columnas para regresión
 def validar_columnas_para_regresion(data):
@@ -224,6 +227,11 @@ def aplicar_modelo_regresion(data):
                 st.write("Coeficientes del modelo:")
                 coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
                 st.write(coef_df)
+                
+                # Guardar resultados en session_state
+                st.session_state['mse'] = mse
+                st.session_state['r2'] = r2
+                st.session_state['coef_df'] = coef_df
             except Exception as e:
                 st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
@@ -231,6 +239,9 @@ def aplicar_modelo_regresion(data):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
+    
+    if st.button("Crear Informe Ejecutivo"):
+        st.session_state['view'] = 'informe'
 
 # Función para crear y exportar informe ejecutivo
 def crear_informe_ejecutivo(data, results):
@@ -294,18 +305,28 @@ if st.session_state['view'] == 'menu':
         st.session_state['view'] = 'analisis'
 
 if st.session_state['view'] == 'analisis' or st.session_state['view'] in ['eda', 'regresion']:
-    opciones = ["EDA", "Regresión"]
+    opciones = ["EDA", "Regresión", "Crear Informe Ejecutivo"]
     opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
 
     if opcion == "EDA":
         st.session_state['view'] = 'eda'
     elif opcion == "Regresión":
         st.session_state['view'] = 'regresion'
+    elif opcion == "Crear Informe Ejecutivo":
+        st.session_state['view'] = 'informe'
 
 if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
+elif st.session_state['view'] == 'informe':
+    if st.button("Generar Informe Ejecutivo"):
+        results = {
+            "MSE": st.session_state.get("mse"),
+            "R2": st.session_state.get("r2"),
+            "Coeficientes": st.session_state.get("coef_df")
+        }
+        crear_informe_ejecutivo(st.session_state['data'], results)
 
 # Botón para generar informe ejecutivo
 if st.session_state['view'] == 'analisis' and st.button("Crear Informe Ejecutivo"):
