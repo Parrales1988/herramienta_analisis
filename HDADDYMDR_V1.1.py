@@ -300,17 +300,18 @@ def crear_informe_ejecutivo(data, results):
     st.success("Informe ejecutivo creado y listo para descargar.")
     
     # Mostrar el enlace de descarga en Streamlit
-    st.download_button(
+    download_button = st.download_button(
         label="Descargar Informe Ejecutivo",
         data=pdf_buffer,
         file_name="informe_ejecutivo.pdf",
         mime="application/pdf"
     )
     
-    if st.button("Volver al Menú Principal", key="informe_volver"):
-        if 'data' in st.session_state:
-            del st.session_state['data']
-        st.session_state['view'] = 'menu'
+    if download_button:
+        if st.button("Volver al Menú Principal", key="informe_volver"):
+            if 'data' in st.session_state:
+                del st.session_state['data']
+            st.session_state['view'] = 'menu'
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
