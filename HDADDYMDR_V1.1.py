@@ -296,6 +296,8 @@ def crear_informe_ejecutivo(data, results):
     pdf_bytes = pdf.output(dest='S').encode('latin1')
     pdf_buffer.write(pdf_bytes)
     pdf_buffer.seek(0)
+
+    st.success("Informe ejecutivo creado y listo para descargar.")
     
     # Mostrar el enlace de descarga en Streamlit
     st.download_button(
@@ -304,7 +306,6 @@ def crear_informe_ejecutivo(data, results):
         file_name="informe_ejecutivo.pdf",
         mime="application/pdf"
     )
-    st.success("Informe ejecutivo creado y listo para descargar.")
     
     if st.button("Volver al Menú Principal"):
         if 'data' in st.session_state:
