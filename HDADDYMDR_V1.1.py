@@ -150,9 +150,6 @@ def realizar_eda(data):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
-    
-    if st.button("Crear Informe Ejecutivo"):
-        st.session_state['view'] = 'informe'
 
 # Función para validar columnas para regresión
 def validar_columnas_para_regresion(data):
@@ -247,9 +244,6 @@ def aplicar_modelo_regresion(data):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
-    
-    if st.button("Crear Informe Ejecutivo"):
-        st.session_state['view'] = 'informe'
 
 # Función para crear y exportar informe ejecutivo
 def crear_informe_ejecutivo(data, results):
@@ -262,12 +256,12 @@ def crear_informe_ejecutivo(data, results):
     pdf.add_page()
 
     # Título del informe
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Arial", 'B', 16)
     pdf.cell(200, 10, txt="Informe Ejecutivo del Análisis de Datos", ln=True, align='C')
     pdf.ln(10)
 
     # Primeras filas del dataset
-    pdf.set_font("Arial", size=10)
+    pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Primeras filas del dataset:", ln=True)
     pdf.ln(5)
     for i, row in data.head().iterrows():
@@ -280,7 +274,7 @@ def crear_informe_ejecutivo(data, results):
     info = buffer.getvalue()
     pdf.cell(200, 10, txt="Información del dataset:", ln=True)
     pdf.ln(5)
-    pdf.multi_cell(200, 10, txt=info)
+    pdf.multi_cell(0, 10, txt=info)
     pdf.ln(10)
 
     # Estadísticas descriptivas
@@ -333,33 +327,22 @@ if st.session_state['view'] == 'menu':
     else:
         st.session_state['view'] = 'analisis'
 
-if st.session_state['view'] == 'analisis' or st.session_state['view'] in ['eda', 'regresion']:
-    opciones = ["EDA", "Regresión"]
+if st.session_state['view'] == 'analisis' or st.session_state['view'] in ['eda', 'regresion', 'informe']:
+    opciones = ["EDA", "Regresión", "Generar Informe Ejecutivo"]
     opcion = st.sidebar.selectbox("Seleccione una opción de análisis", opciones, key="main_option")
 
     if opcion == "EDA":
         st.session_state['view'] = 'eda'
     elif opcion == "Regresión":
         st.session_state['view'] = 'regresion'
+    elif opcion == "Generar Informe Ejecutivo":
+        st.session_state['view'] = 'informe'
 
 if st.session_state['view'] == 'eda':
     realizar_eda(st.session_state['data'])
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
 elif st.session_state['view'] == 'informe':
-    if st.button("Generar Informe Ejecutivo"):
-        results = {
-            "MSE": st.session_state.get("mse"),
-            "R2": st.session_state.get("r2"),
-            "Coeficientes": st.session_state.get("coef_df")
-        }
-        crear_informe_ejecutivo(st.session_state['data'], results)
-
-# Botón para generar informe ejecutivo
-if st.session_state['view'] == 'analisis' and st.button("Crear Informe Ejecutivo"):
-    st.session_state['view'] = 'informe'
-
-if st.session_state['view'] == 'informe':
     if st.button("Generar Informe Ejecutivo"):
         results = {
             "MSE": st.session_state.get("mse"),
