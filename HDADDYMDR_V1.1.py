@@ -79,7 +79,7 @@ def cargar_dataset_kaggle():
                             st.session_state['data'] = data
                             st.session_state['data_loaded'] = True
                             st.success("Dataset cargado exitosamente.")
-                            st.button("OK", type="primary")
+                            st.button("OK", key="kaggle_ok")
                             break
                 else:
                     st.error("Archivo CSV no encontrado.")
@@ -102,7 +102,7 @@ def cargar_dataset_csv():
                     for percent_complete in range(100):
                         progress_bar.progress(percent_complete + 1)
                 st.success("Dataset cargado exitosamente.")
-                st.button("OK", type="primary")
+                st.button("OK", key="csv_ok")
                 st.session_state['data'] = data
                 st.session_state['data_loaded'] = True
             except Exception as e:
@@ -146,7 +146,7 @@ def realizar_eda(data):
         except Exception as e:
             st.error(f"Error al mostrar la correlación: {e}")
 
-    if st.button("Volver al Menú Principal"):
+    if st.button("Volver al Menú Principal", key="eda_volver"):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
@@ -240,7 +240,7 @@ def aplicar_modelo_regresion(data):
             except Exception as e:
                 st.error(f"Error al entrenar o evaluar el modelo: {e}")
 
-    if st.button("Volver al Menú Principal"):
+    if st.button("Volver al Menú Principal", key="regresion_volver"):
         if 'data' in st.session_state:
             del st.session_state['data']
         st.session_state['view'] = 'menu'
@@ -307,7 +307,10 @@ def crear_informe_ejecutivo(data, results):
         mime="application/pdf"
     )
     
-    st.button("Volver al Menú Principal")
+    if st.button("Volver al Menú Principal", key="informe_volver"):
+        if 'data' in st.session_state:
+            del st.session_state['data']
+        st.session_state['view'] = 'menu'
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
@@ -341,11 +344,14 @@ if st.session_state['view'] == 'eda':
 elif st.session_state['view'] == 'regresion':
     aplicar_modelo_regresion(st.session_state['data'])
 elif st.session_state['view'] == 'informe':
-    if st.button("Generar Informe Ejecutivo"):
+    if st.button("Generar Informe Ejecutivo", key="generar_informe"):
         results = {
             "MSE": st.session_state.get("mse"),
             "R2": st.session_state.get("r2"),
             "Coeficientes": st.session_state.get("coef_df")
         }
         crear_informe_ejecutivo(st.session_state['data'], results)
-    st.button("Volver al Menú Principal")
+    if st.button("Volver al Menú Principal", key="volver_menu"):
+        if 'data' in st.session_state:
+            del st.session_state['data']
+        st.session_state['view'] = 'menu'
