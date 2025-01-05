@@ -291,7 +291,7 @@ def crear_informe_ejecutivo(data, results):
     
     # Guardar el PDF en un buffer de bytes
     pdf_buffer = io.BytesIO()
-    pdf.output(pdf_buffer)
+    pdf.output(pdf_buffer, 'F')
     pdf_buffer.seek(0)
     
     # Mostrar el enlace de descarga en Streamlit
