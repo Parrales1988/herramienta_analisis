@@ -6,6 +6,7 @@ import os
 import io
 import json
 import kaggle
+import tempfile
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
@@ -309,19 +310,21 @@ def crear_informe_ejecutivo(data, results):
         canvas.print_png(buf)
         buf.seek(0)
 
-        # Guardar la imagen en el sistema de archivos temporal
-        with open("temp.png", "wb") as f:
-            f.write(buf.getbuffer())
+        # Usar un archivo temporal seguro
+        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temp_file:
+            temp_file.write(buf.getbuffer())
+            temp_file_path = temp_file.name
 
         # Añadir la imagen al PDF
-        pdf.image("temp.png", x=None, y=None, w=180, h=0, type='PNG')
+        pdf.image(temp_file_path, x=None, y=None, w=180, h=0, type='PNG')
 
         # Eliminar el archivo temporal
-        os.remove("temp.png")
+        os.remove(temp_file_path)
 
     # Guardar el PDF en un archivo temporal
-    pdf_filename = "informe_ejecutivo.pdf"
-    pdf.output(pdf_filename)
+    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as temp_file:
+        pdf.output(temp_file.name)
+        pdf_filename = temp_file.name
 
     # Leer el archivo temporal y guardarlo en un buffer de bytes
     with open(pdf_filename, "rb") as f:
