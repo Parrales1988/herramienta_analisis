@@ -284,9 +284,19 @@ def crear_informe_ejecutivo(data, results):
         for key, value in results.items():
             pdf.cell(200, 10, txt=f"{key}: {value}", ln=True)
     
-    # Guardar el PDF
-    pdf.output("informe_ejecutivo.pdf")
-    st.success("Informe ejecutivo creado y guardado como 'informe_ejecutivo.pdf'")
+    # Guardar el PDF en un buffer de bytes
+    pdf_buffer = io.BytesIO()
+    pdf.output(pdf_buffer)
+    pdf_buffer.seek(0)
+    
+    # Mostrar el enlace de descarga en Streamlit
+    st.download_button(
+        label="Descargar Informe Ejecutivo",
+        data=pdf_buffer,
+        file_name="informe_ejecutivo.pdf",
+        mime="application/pdf"
+    )
+    st.success("Informe ejecutivo creado y listo para descargar.")
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
