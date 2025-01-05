@@ -30,7 +30,7 @@ def cargar_dataset_kaggle():
     dataset_url = st.sidebar.text_input("Enlace del dataset (Kaggle)", "")
 
     if st.sidebar.button("Cargar Dataset desde Kaggle"):
-        if not kaggle_username or not kaggle_key or not dataset_url:
+        if not kaggle_username or not kaggle key or not dataset_url:
             st.error("Por favor, complete todos los campos.")
         else:
             try:
@@ -61,7 +61,7 @@ def cargar_dataset_kaggle():
                 dataset_info = "/".join(dataset_url.split('/')[-2:])
                 with st.spinner('Descargando dataset...'):
                     progress_bar = st.progress(0)
-                    for i in range(100):
+                    for i in range 100):
                         api.dataset_download_files(dataset_info, path=".", unzip=True)
                         progress_bar.progress(i + 1)
                 st.success("Dataset descargado exitosamente.")
@@ -99,7 +99,7 @@ def cargar_dataset_csv():
                 with st.spinner('Cargando dataset...'):
                     progress_bar = st.progress(0)
                     data = pd.read_csv(uploaded_file)
-                    for percent_complete in range(100):
+                    for percent_complete in range 100):
                         progress_bar.progress(percent_complete + 1)
                 st.success("Dataset cargado exitosamente.")
                 st.button("OK", type="primary")
@@ -303,6 +303,11 @@ def crear_informe_ejecutivo(data, results):
         mime="application/pdf"
     )
     st.success("Informe ejecutivo creado y listo para descargar.")
+    
+    if st.button("Volver al Menú Principal"):
+        if 'data' in st.session_state:
+            del st.session_state['data']
+        st.session_state['view'] = 'menu'
 
 # Flujo principal de la aplicación
 if 'view' not in st.session_state:
