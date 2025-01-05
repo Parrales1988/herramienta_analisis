@@ -319,10 +319,16 @@ def crear_informe_ejecutivo(data, results):
         # Eliminar el archivo temporal
         os.remove("temp.png")
 
-    # Guardar el PDF en un buffer de bytes
-    pdf_buffer = io.BytesIO()
-    pdf.output(pdf_buffer)
-    pdf_buffer.seek(0)
+    # Guardar el PDF en un archivo temporal
+    pdf_filename = "informe_ejecutivo.pdf"
+    pdf.output(pdf_filename)
+
+    # Leer el archivo temporal y guardarlo en un buffer de bytes
+    with open(pdf_filename, "rb") as f:
+        pdf_buffer = io.BytesIO(f.read())
+
+    # Eliminar el archivo temporal
+    os.remove(pdf_filename)
 
     st.success("Informe ejecutivo creado y listo para descargar.")
     
