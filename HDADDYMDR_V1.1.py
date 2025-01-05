@@ -220,13 +220,13 @@ def aplicar_modelo_regresion(data):
                 mse = mean_squared_error(y_test, y_pred)
                 r2 = r2_score(y_test, y_pred)
 
-                st.write("Resultados del Modelo:")
-                st.write(f"Error Cuadrático Medio (MSE): {mse}")
-                st.write(f"Coeficiente de Determinación (R^2): {r2}")
+                #st.write("Resultados del Modelo:")
+                #st.write(f"Error Cuadrático Medio (MSE): {mse}")
+                #st.write(f"Coeficiente de Determinación (R^2): {r2}")
 
-                st.write("Coeficientes del modelo:")
+                #st.write("Coeficientes del modelo:")
                 coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
-                st.write(coef_df)
+                #st.write(coef_df)
                 
                 # Guardar resultados en session_state
                 st.session_state['mse'] = mse
