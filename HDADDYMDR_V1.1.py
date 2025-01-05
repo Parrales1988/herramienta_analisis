@@ -12,6 +12,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from kaggle.api.kaggle_api_extended import KaggleApi
 from kaggle.rest import ApiException
 from fpdf import FPDF
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 # Configuración inicial
 st.title("Herramienta de análisis de datos y modelos de regresión")
@@ -252,7 +253,7 @@ def crear_informe_ejecutivo(data, results):
         st.error("Datos o resultados no disponibles para generar el informe.")
         return
 
-    pdf = FPDF()
+    pdf = FPDF(orientation='P', unit='mm', format='A4')
     pdf.add_page()
 
     # Título del informe
@@ -281,7 +282,7 @@ def crear_informe_ejecutivo(data, results):
     pdf.cell(200, 10, txt="Estadísticas descriptivas:", ln=True)
     pdf.ln(5)
     for col, val in data.describe().iterrows():
-        pdf.cell(200, 10, txt=f"{col}: {val.values}", ln=True)
+        pdf.multi_cell(0, 10, txt=f"{col}: {val.values}")
     pdf.ln(10)
 
     # Resultados del modelo de regresión
@@ -289,12 +290,26 @@ def crear_informe_ejecutivo(data, results):
         pdf.cell(200, 10, txt="Resultados del Modelo de Regresión:", ln=True)
         pdf.ln(5)
         for key, value in results.items():
-            pdf.cell(200, 10, txt=f"{key}: {value}", ln=True)
-    
+            pdf.multi_cell(0, 10, txt=f"{key}: {value}")
+
+        # Añadir gráfica de correlación
+        fig, ax = plt.subplots(figsize=(8, 6))
+        sns.heatmap(data.corr(), annot=True, fmt=".2f", cmap="coolwarm", ax=ax)
+        fig.tight_layout()
+
+        # Guardar la gráfica en un buffer
+        buf = io.BytesIO()
+        canvas = FigureCanvas(fig)
+        canvas.print_png(buf)
+        buf.seek(0)
+
+        # Añadir la imagen al PDF
+        pdf.image(buf, x=None, y=None, w=0, h=0, type='PNG')
+        buf.close()
+
     # Guardar el PDF en un buffer de bytes
     pdf_buffer = io.BytesIO()
-    pdf_bytes = pdf.output(dest='S').encode('latin1')
-    pdf_buffer.write(pdf_bytes)
+    pdf.output(pdf_buffer)
     pdf_buffer.seek(0)
 
     st.success("Informe ejecutivo creado y listo para descargar.")
