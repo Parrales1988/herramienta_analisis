@@ -245,6 +245,11 @@ def aplicar_modelo_regresion(data):
 
 # Función para crear y exportar informe ejecutivo
 def crear_informe_ejecutivo(data, results):
+    # Verificar que el data y results sean válidos
+    if data is None or results is None:
+        st.error("Datos o resultados no disponibles para generar el informe.")
+        return
+
     pdf = FPDF()
     pdf.add_page()
 
