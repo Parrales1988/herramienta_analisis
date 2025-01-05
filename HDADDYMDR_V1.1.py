@@ -294,7 +294,13 @@ def crear_informe_ejecutivo(data, results):
 
         # Añadir gráfica de correlación
         fig, ax = plt.subplots(figsize=(8, 6))
-        sns.heatmap(data.corr(), annot=True, fmt=".2f", cmap="coolwarm", ax=ax)
+
+        # Convertir columnas categóricas a numéricas para la gráfica de correlación
+        data_numeric = data.copy()
+        for column in data_numeric.select_dtypes(include=['object']).columns:
+            data_numeric[column] = data_numeric[column].astype('category').cat.codes
+
+        sns.heatmap(data_numeric.corr(), annot=True, fmt=".2f", cmap="coolwarm", ax=ax)
         fig.tight_layout()
 
         # Guardar la gráfica en un buffer
