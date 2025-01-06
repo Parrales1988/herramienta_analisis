@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import os
 import io
 import json
-import kaggle
 import tempfile
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -36,22 +35,9 @@ def cargar_dataset_kaggle():
             st.error("Por favor, complete todos los campos.")
         else:
             try:
-                # Crear la carpeta .kaggle si no existe
-                kaggle_dir = os.path.join(os.path.expanduser("~"), ".kaggle")
-                if not os.path.exists(kaggle_dir):
-                    os.makedirs(kaggle_dir)
-
-                # Crear el archivo kaggle.json con las credenciales
-                kaggle_json_path = os.path.join(kaggle_dir, "kaggle.json")
-                kaggle_json_content = {
-                    "username": kaggle_username,
-                    "key": kaggle_key
-                }
-                with open(kaggle_json_path, "w") as f:
-                    json.dump(kaggle_json_content, f)
-
-                # Establecer permisos correctos al archivo kaggle.json
-                os.chmod(kaggle_json_path, 0o600)
+                # Configuración de las credenciales de Kaggle
+                os.environ['KAGGLE_USERNAME'] = kaggle_username
+                os.environ['KAGGLE_KEY'] = kaggle_key
 
                 # Configuración de la API de Kaggle
                 api = KaggleApi()
@@ -63,9 +49,8 @@ def cargar_dataset_kaggle():
                 dataset_info = "/".join(dataset_url.split('/')[-2:])
                 with st.spinner('Descargando dataset...'):
                     progress_bar = st.progress(0)
-                    for i in range(100):
-                        api.dataset_download_files(dataset_info, path=".", unzip=True)
-                        progress_bar.progress(i + 1)
+                    api.dataset_download_files(dataset_info, path=".", unzip=True)
+                    progress_bar.progress(100)
                 st.success("Dataset descargado exitosamente.")
                 
                 # Mostrar lista de archivos descargados para verificar el nombre correcto
@@ -74,7 +59,7 @@ def cargar_dataset_kaggle():
                     if file_name.endswith(".csv"):
                         st.write(file_name)
                 
-                # Intentar leer el archivo CSV
+                        # Intentar leer el archivo CSV
                         dataset_path = os.path.join(".", file_name)
                         if os.path.exists(dataset_path):
                             data = pd.read_csv(dataset_path)
@@ -168,7 +153,7 @@ def aplicar_modelo_regresion(data):
     st.write("En esta sección puedes construir un modelo de regresión lineal para analizar tus datos.")
     st.write("Podrás observar los coeficientes del modelo, que indican la influencia de cada variable predictora en la variable objetivo.")
     st.write("También se calculan métricas como el Error Cuadrático Medio (MSE) para medir la precisión y el Coeficiente de Determinación (R^2) para evaluar la calidad del ajuste del modelo.")
-    
+
     columnas_validas = validar_columnas_para_regresion(data)
     st.write("Columnas válidas para regresión:")
     st.write(columnas_validas)
@@ -219,7 +204,7 @@ def aplicar_modelo_regresion(data):
                 mse = mean_squared_error(y_test, y_pred)
                 r2 = r2_score(y_test, y_pred)
 
-                #Coeficientes del modelo
+                # Coeficientes del modelo
                 coef_df = pd.DataFrame({"Variable": features, "Coeficiente": modelo.coef_})
                 
                 # Guardar resultados en session_state
